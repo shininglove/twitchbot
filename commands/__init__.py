@@ -1,7 +1,5 @@
 from datetime import datetime
 
-# http://tmi.twitch.tv/group/user/samora/chatters
-
 class Message:
     prefix = "!"
     output = None

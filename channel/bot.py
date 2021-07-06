@@ -1,8 +1,11 @@
+import os
 from irc.bot import SingleServerIRCBot
-from config import CLIENT_ID, TOKEN
-from commands import Message
 import requests
+from logger import logger
+from commands import Message
 
+CLIENT_ID = os.getenv("CLIENT_ID")
+TOKEN = os.getenv("TWITCH_ACCESS_TOKEN")
 
 class TwitchBot(SingleServerIRCBot):
 
@@ -43,8 +46,8 @@ class TwitchBot(SingleServerIRCBot):
         cmd = Message(tags.display_name, message).output
         if cmd:
             self.send_message(cmd)
-        print(f"Message from {tags.display_name} : {message}")
         # print(event.tags)
+        logger.debug(f"Message from {tags.display_name} (user_id:{tags.user_id}) : {message}")
 
     def send_message(self, message):
         self.connection.privmsg(self.channel, message)
