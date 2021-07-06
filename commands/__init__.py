@@ -1,4 +1,5 @@
 from datetime import datetime
+from commands.handler import soundeffect, songrequest
 
 class Message:
     prefix = "!"
@@ -15,8 +16,10 @@ class Message:
     def parse(self, command):
         if command == "month":
             self.output = datetime.now().strftime("%B")
-        if command.startswith("say"):
-            self.output = " ".join(command.split(" ")[1:])
+        if command.startswith("sr") or command.startswith("songrequest"):
+            self.output = songrequest(command)
+        if command.startswith("soundeffect"):
+            self.output = soundeffect(command)
         if command == "hi":
             self.output = f"@{self.user} HELLO"
         if command == "bye":

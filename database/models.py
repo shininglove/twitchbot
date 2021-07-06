@@ -37,6 +37,7 @@ class SongRequests(Base):
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("song_name", db.String(255))
     url = db.Column("song_url", db.String(255))
+    status = db.Column("song_status", db.String(255))
     times_requested = db.Column("times_requested", db.Integer)
     user_id = db.Column(db.Integer,db.ForeignKey("user_info.id"),nullable=False)
     date = db.Column("date_created", db.DateTime, default=datetime.now())
