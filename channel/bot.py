@@ -43,7 +43,7 @@ class TwitchBot(SingleServerIRCBot):
     def on_pubmsg(self, conn, event):
         tags = Tags(event.tags)
         message = event.arguments[0]
-        cmd = Message(tags.display_name, message).output
+        cmd = Message(tags, message).output
         if cmd:
             self.send_message(cmd)
         # print(event.tags)

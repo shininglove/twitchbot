@@ -38,7 +38,7 @@ class SongRequests(Base):
     name = db.Column("song_name", db.String(255))
     url = db.Column("song_url", db.String(255))
     status = db.Column("song_status", db.String(255))
-    times_requested = db.Column("times_requested", db.Integer)
+    times_requested = db.Column("times_requested", db.Integer, default=0)
     user_id = db.Column(db.Integer,db.ForeignKey("user_info.id"),nullable=False)
     date = db.Column("date_created", db.DateTime, default=datetime.now())
     last_requested = db.Column("date_modified", db.DateTime, default=datetime.now())
@@ -46,4 +46,5 @@ class SongRequests(Base):
     def __repr__(self):
         return "<SongRequests(userid={0})>".format(self.user_id)
 
-
+class UserCommands(Base):
+    pass

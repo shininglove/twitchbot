@@ -1,18 +1,26 @@
 # Example Endpoint: http://tmi.twitch.tv/group/user/samora/chatters
-from channel.channel import post_song
+from channel.channel import post_song,current_song,search_youtube,wrong_song
 
 def songrequest(command):
-    raw_song_req = command.split()[1:]
-    parsed_song_req = ",".join(raw_song_req)
-    if "youtube" not in parsed_song_req:
-        return "Provide URL!"
+    if "youtube" not in command:
+        raw_song_req = command.split()[1:]
+        search_term = " ".join(raw_song_req)
+        video_id = search_youtube(search_term)
+        if video_id is None:
+            return "Cannot find video."
+        parsed_song_req = f"https://www.youtube.com/watch?v={video_id}"
+    else:
+        parsed_song_req = command.split()[1]
     status = post_song(parsed_song_req)
-    return f"Song Posted. {status}"
+    return f"{status}"
+
+def currentsong(user):
+    return current_song(user)
 
 def soundeffect(command):
     raw_sound_req = command.split()[1:]
     parsed_sound_req = ",".join(raw_sound_req)
     return parsed_sound_req
 
-
-
+def wrongsong(user):
+    return wrong_song(user)
