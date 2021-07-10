@@ -1,5 +1,6 @@
 # Example Endpoint: http://tmi.twitch.tv/group/user/samora/chatters
-from channel.channel import post_song,current_song,search_youtube,wrong_song
+from channel.twitch import post_song,current_song,wrong_song
+from channel.youtube import search_youtube
 
 def songrequest(command):
     if "youtube" not in command:
