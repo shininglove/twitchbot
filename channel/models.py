@@ -1,20 +1,21 @@
 import datetime
 
-class SongDetails:
 
-    def __init__(self,data):
+class SongDetails:
+    def __init__(self, data):
         self.data = data
         self.id = data.get("_id")
-        self.title = data.get('title')
-        self.duration = self.parse_duration(data.get('duration',0))
-        self.user = data.get('user',{'displayName':"You"}).get('displayName')
-        self.channel = data.get('channel')
+        self.title = data.get("title")
+        self.video_id = data.get("videoId")
+        self.duration = self.parse_duration(data.get("duration", 0))
+        self.user = data.get("user", {"displayName": "You"}).get("displayName")
+        self.channel = data.get("channel")
         self.position = None
 
     @staticmethod
     def parse_duration(duration):
         raw_duration = datetime.timedelta(seconds=int(duration))
-        hour,mins,secs = str(raw_duration).split(":")
+        hour, mins, secs = str(raw_duration).split(":")
         return f"{mins} mins {secs} secs"
 
     def message(self):

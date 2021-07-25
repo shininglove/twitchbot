@@ -1,8 +1,16 @@
 import os, argparse
 from dotenv import load_dotenv
-load_dotenv("../.env")
-from models import User, SoundEffects, SongRequests, UserCommands, UserMessages,db
-from utilities import create_table,delete_table,engine
+
+load_dotenv()
+from database.models import (
+    User,
+    SoundEffects,
+    SongRequests,
+    UserCommands,
+    UserMessages,
+    db,
+)
+from database.utilities import create_table, delete_table, engine
 
 parser = argparse.ArgumentParser()
 
@@ -16,7 +24,7 @@ operation = " ".join(args.operation)
 
 operation_names = args.operation[0].split(" ")
 
-database_names = [UserCommands,UserMessages,SongRequests,SoundEffects,User]
+database_names = [UserCommands, UserMessages, SongRequests, SoundEffects, User]
 
 if operation == "build":
     create_names = database_names

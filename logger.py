@@ -21,4 +21,3 @@ formatter = logging.Formatter(
 filelog.setFormatter(formatter)
 
 logger.addHandler(filelog)
-

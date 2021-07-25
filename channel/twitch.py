@@ -1,11 +1,12 @@
-import os,requests
+import os, requests
 from channel.models import SongDetails
 from channel.utilities import verify_video
-from channel.youtube import check_duration,search_youtube,video_info
+from channel.youtube import check_duration, search_youtube, video_info
 from logger import logger
 
 channel_id = os.getenv("BOT_CHANNEL_ID")
 api_key = os.getenv("JWT_TOKEN")
+
 
 def post_song(youtube_url):
     """
@@ -28,6 +29,7 @@ def post_song(youtube_url):
     song_details.position = queue_ids.index(song_details.id) + 1
     return song_details.message()
 
+
 def current_song(user):
     """
     Current YT URL: Cut after '?'
@@ -36,11 +38,12 @@ def current_song(user):
         f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/playing"
     )
     headers = {"Authorization": f"Bearer {api_key}"}
-    response = requests.get(song_api_url,headers=headers)
+    response = requests.get(song_api_url, headers=headers)
     song_data = response.json()
-    song_data['user']['displayName'] = user
+    song_data["user"]["displayName"] = user
     song_details = SongDetails(song_data)
     return song_details.current_message()
+
 
 def wrong_song(user):
     current_queue = song_queue()
@@ -51,21 +54,20 @@ def wrong_song(user):
     if user_songs == []:
         return "No songs in the queue."
     last_song_requested = user_songs[-1]
-    song_api_url = (
-        f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/queue/{last_song_requested}"
-    )
+    song_api_url = f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/queue/{last_song_requested}"
     headers = {"Authorization": f"Bearer {api_key}"}
-    response = requests.delete(song_api_url,headers=headers)
+    response = requests.delete(song_api_url, headers=headers)
     return f"@{ user } Your last song was deleted."
+
 
 def song_queue():
     song_api_url = (
         f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/queue/public"
     )
     headers = {"Authorization": f"Bearer {api_key}"}
-    response = requests.get(song_api_url,headers=headers)
+    response = requests.get(song_api_url, headers=headers)
     queue_data = response.json()
     return queue_data
 
-# post_song("https://www.youtube.com/watch?v=gVUIDqtw1bk")
 
+# post_song("https://www.youtube.com/watch?v=gVUIDqtw1bk")

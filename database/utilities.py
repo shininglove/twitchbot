@@ -1,5 +1,5 @@
 from datetime import datetime
-from config import connection,test_connection
+from database.config import connection, test_connection
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +13,16 @@ Session = sessionmaker()
 Session.configure(bind=engine)
 
 session = Session()
+
+
+class Model:
+    def save(self):
+        try:
+            session.add(self)
+        except Exception as e:
+            logger.debug(e)
+        session.commit()
+
 
 def create_table(model, engine=engine):
     if not model.__table__.exists(engine):
@@ -32,4 +42,3 @@ def delete_table(model, engine=engine):
 # print(create_table(TableFull))
 # check_request = session.query(TableName).all()
 # print(check_request)
-

@@ -7,6 +7,7 @@ from commands import Message
 CLIENT_ID = os.getenv("CLIENT_ID")
 TOKEN = os.getenv("TWITCH_ACCESS_TOKEN")
 
+
 class TwitchBot(SingleServerIRCBot):
 
     host = "irc.chat.twitch.tv"
@@ -45,9 +46,15 @@ class TwitchBot(SingleServerIRCBot):
         message = event.arguments[0]
         cmd = Message(tags, message).output
         if cmd:
-            self.send_message(cmd)
+            if type(cmd) is list:
+                for item in cmd:
+                    self.send_message(item)
+            else:
+                self.send_message(cmd)
         # print(event.tags)
-        logger.debug(f"Message from {tags.display_name} (user_id:{tags.user_id}) : {message}")
+        logger.debug(
+            f"Message from {tags.display_name} (user_id:{tags.user_id}) : {message}"
+        )
 
     def send_message(self, message):
         self.connection.privmsg(self.channel, message)
@@ -64,5 +71,3 @@ class Tags:
         if "-" in item:
             item = item.replace("-", "_")
         return item
-
-
