@@ -24,7 +24,7 @@ operation = " ".join(args.operation)
 
 operation_names = args.operation[0].split(" ")
 
-database_names = [UserCommands, UserMessages, SongRequests, SoundEffects, User]
+database_names = [UserCommands, UserMessages, SongRequests, SoundEffects]
 
 if operation == "build":
     create_names = database_names

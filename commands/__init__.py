@@ -35,6 +35,6 @@ class Message:
         if command == "sr" or command == "songrequest":
             self.output = songrequest(self.user, raw_command)
         if command == "soundeffect":
-            self.output = soundeffect(raw_command)
+            self.output = soundeffect(self.user,raw_command)
         if command == "hi":
             self.output = f"@{self.username} HELLO"
