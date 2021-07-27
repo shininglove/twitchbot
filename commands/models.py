@@ -2,18 +2,19 @@ import os
 from channel.youtube import check_duration
 from logger import logger
 
+
 class ChatSound:
-    def __init__(self,name,url,start,end):
+    def __init__(self, name, url, start, end):
         self.name = name
         self.url = url
         self.start = self.parse_time(start)
         self.end = self.parse_time(end)
 
-    def parse_time(self,time_command):
-        mins,secs = time_command.split(":")
-        minutes_in_seconds = int(mins)*60
+    def parse_time(self, time_command):
+        mins, secs = time_command.split(":")
+        minutes_in_seconds = int(mins) * 60
         seconds = int(secs)
-        return minutes_in_seconds + seconds 
+        return minutes_in_seconds + seconds
 
     def valid_sound_duration(self):
         max_duration = int(os.getenv("MAX_SOUND_DURATION")) * 60
@@ -37,4 +38,3 @@ class ChatSound:
             logger.debug("Length doesn't make sense")
             return False
         return True
-

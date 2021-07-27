@@ -24,7 +24,7 @@ def currentsong(user):
     return current_song(user)
 
 
-def soundeffect(user,command):
+def soundeffect(user, command):
     """
     Add Sounds to DB to be approved.
     """
@@ -36,12 +36,14 @@ def soundeffect(user,command):
             raise ValueError
         if ":" not in start_time or ":" not in end_time:
             raise ValueError
+        if any(not part.isalnum() for part in name):
+            raise ValueError
+        sound = ChatSound(name, url, start_time, end_time)
+        valid_sound = sound.valid_sound_duration()
     except ValueError:
-        return f"@{ user.display_name }, example format: !soundeffect [name] [url] 00:00 00:05."
-    sound = ChatSound(name,url,start_time,end_time)
-    valid_sound = sound.valid_sound_duration()
+        return f"@{ user.display_name }, example format: !soundeffect name url 00:00 00:05."
     if valid_sound:
-        sound_effect = save_sound_effect(user,sound)
+        sound_effect = save_sound_effect(user, sound)
     else:
         return "Sound Length is not allowed"
     if sound_effect is not None:
@@ -52,6 +54,6 @@ def soundeffect(user,command):
 def wrongsong(user):
     return wrong_song(user)
 
+
 def save_user_message(user, message):
     return save_message(user, message)
-

@@ -41,7 +41,7 @@ def check_duration(video_id):
 
     duration_info = content_details["duration"]
 
-    video_duration = parse_duration(duration_info).total_seconds() 
+    video_duration = parse_duration(duration_info).total_seconds()
 
     return video_duration
 

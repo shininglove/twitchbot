@@ -1,5 +1,5 @@
 import os
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 from sqlalchemy.orm import relationship
 from database.utilities import db, Base, session
 from logger import logger
@@ -18,7 +18,7 @@ class User(Base):
     user_id = db.Column("user_id", db.String(255))
     name = db.Column("username", db.String(255))
     date = db.Column("date_created", db.DateTime, default=datetime.now())
-    stamina = db.Column("stamina", db.Integer,default=3)
+    stamina = db.Column("stamina", db.Integer, default=3)
     points = db.Column("points", db.Integer, default=0)
     song_requests = relationship("SongRequests", backref="user", lazy=True)
     sound_effects = relationship("SoundEffects", backref="user", lazy=True)
@@ -48,7 +48,7 @@ class SoundEffects(Base):
     name = db.Column("sound_name", db.String(255))
     url = db.Column("sound_url", db.String(255))
     sound_type = db.Column("sound_type", db.String(255))
-    sound_status = db.Column("sound_status", db.String(255),default="unapproved")
+    sound_status = db.Column("sound_status", db.String(255), default="unapproved")
     start_time = db.Column("start_time", db.Integer)
     end_time = db.Column("end_time", db.Integer)
     user_id = db.Column(
@@ -57,13 +57,16 @@ class SoundEffects(Base):
     date = db.Column("date", db.DateTime, default=datetime.now())
 
     def save(self):
-        first_row = session.query(SoundEffects).filter_by(user_id=self.user_id,name=self.name).first()
+        first_row = (
+            session.query(SoundEffects)
+            .filter_by(user_id=self.user_id, name=self.name)
+            .first()
+        )
         if first_row is None:
             session.add(self)
             session.commit()
             return self
         return None
-
 
     def __repr__(self):
         return f"<SoundEffects(name={self.name},url={self.url},start={self.start_time},end={self.end_time})>"
@@ -139,7 +142,9 @@ class UserMessages(Base):
     @property
     def first_message(self):
         yesterday = datetime.today() - timedelta(days=1)
-        messages = session.query(UserMessages).filter(UserMessages.date > yesterday).all()
+        messages = (
+            session.query(UserMessages).filter(UserMessages.date > yesterday).all()
+        )
         if len(messages) > 1:
             return False
         return True

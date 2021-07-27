@@ -31,25 +31,31 @@ def save_message(user, message):
     user_message.save()
     return user_message
 
-def save_sound_effect(user,sound):
+
+def save_sound_effect(user, sound):
+    """
+    Auto approve mods and vips: scheduler download
+    """
     current_user = User(user_id=user.user_id, name=user.display_name)
     saved_user = current_user.save()
     sound_effect = SoundEffects(
         user_id=saved_user.id,
-        name = sound.name,
-        url = sound.url,
-        start_time = sound.start,
-        end_time = sound.end
+        name=sound.name,
+        url=sound.url,
+        start_time=sound.start,
+        end_time=sound.end,
     )
     sound_status = sound_effect.save()
     return sound_status
+
 
 def approve_sound_effect(sound):
     pass
 
 
-def play_sound_effect(user,sound):
+def play_sound_effect(user, sound):
     pass
+
 
 def play_theme_song(user):
     pass
