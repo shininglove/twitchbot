@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 from sqlalchemy.orm import relationship
 from database.utilities import db, Base, session
+from sounds.download import download_song
 from logger import logger
 
 DB_SCHEMA = os.getenv("DB_SCHEMA")
@@ -47,7 +48,7 @@ class SoundEffects(Base):
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("sound_name", db.String(255))
     url = db.Column("sound_url", db.String(255))
-    sound_type = db.Column("sound_type", db.String(255))
+    sound_type = db.Column("sound_type", db.String(255),default="sound")
     sound_status = db.Column("sound_status", db.String(255), default="unapproved")
     start_time = db.Column("start_time", db.Integer)
     end_time = db.Column("end_time", db.Integer)
@@ -56,10 +57,35 @@ class SoundEffects(Base):
     )
     date = db.Column("date", db.DateTime, default=datetime.now())
 
+    @staticmethod
+    def find_sound(sound_name,sound_type="sound"):
+        sound = (
+            session.query(SoundEffects)
+            .filter_by(name=sound_name,sound_type=sound_type)
+            .first()
+        )
+        return sound
+
+    def approve(self):
+        unapproved_row = (
+            session.query(SoundEffects)
+            .filter_by(id=self.id,sound_status="unapproved")
+            .first()
+        )
+        if unapproved_row is None:
+            return None
+        unapproved_row.sound_status = "approved"
+        session.commit()
+        song_status = download_song(unapproved_row)
+        if song_status:
+            return f"{unapproved_row.name} has been approved."
+        return f"Error while downloading sound effect"
+
+
     def save(self):
         first_row = (
             session.query(SoundEffects)
-            .filter_by(user_id=self.user_id, name=self.name)
+            .filter((SoundEffects.url==self.url) | (SoundEffects.name==self.name))
             .first()
         )
         if first_row is None:

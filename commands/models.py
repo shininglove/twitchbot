@@ -4,11 +4,12 @@ from logger import logger
 
 
 class ChatSound:
-    def __init__(self, name, url, start, end):
+    def __init__(self, name, url, start, end,sound_type="sound"):
         self.name = name
         self.url = url
         self.start = self.parse_time(start)
         self.end = self.parse_time(end)
+        self.type = sound_type
 
     def parse_time(self, time_command):
         mins, secs = time_command.split(":")
