@@ -31,3 +31,10 @@ def locate_sound(sound_name):
         return sound_path
     return False
 
+def remove_sound(sound_name):
+    sounds_location = Path("sounds/effects")
+    full_sound_name = f"{sound_name}.mp3"
+    sound_path = sounds_location / full_sound_name
+    if sound_path.exists():
+        sound_path.unlink()
+

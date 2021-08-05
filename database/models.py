@@ -10,7 +10,7 @@ DB_SCHEMA = os.getenv("DB_SCHEMA")
 
 class User(Base):
     """
-    TODO: Back reference
+    TODO: User Level permissions
     """
 
     __tablename__ = "user_info"
@@ -66,6 +66,18 @@ class SoundEffects(Base):
         )
         return sound
 
+    def delete_sound(self):
+        sound = (
+            session.query(SoundEffects)
+            .filter_by(name=self.name)
+            .delete()
+        )
+        try:
+            session.commit()
+        except Exception:
+            return None
+        return True
+
     def approve(self):
         unapproved_row = (
             session.query(SoundEffects)
@@ -92,6 +104,16 @@ class SoundEffects(Base):
             session.add(self)
             session.commit()
             return self
+
+        if first_row.name == self.name and first_row.user_id == self.user_id:
+            first_row.url = self.url
+            first_row.start_time = self.start_time
+            first_row.end_time = self.end_time
+            first_row.sound_status = "unapproved"
+            session.commit()
+            self.id = first_row.id
+            return self
+
         return None
 
     def __repr__(self):
@@ -145,11 +167,52 @@ class UserCommands(Base):
     command_name = db.Column("command_name", db.String(255))
     message = db.Column("message", db.String(255))
     aliases = db.Column("aliases", db.String(255))
-    user_level = db.Column("user_level", db.String(255))
+    user_level = db.Column("user_level", db.Integer,default=0)
     user_id = db.Column(
         db.Integer, db.ForeignKey(f"{DB_SCHEMA}.user_info.id"), nullable=False
     )
     date = db.Column("date_created", db.DateTime, default=datetime.now())
+
+    def find_command(self):
+        command = (
+            session.query(UserCommands)
+            .filter_by(command_name=self.command_name)
+            .first()
+        )
+        return command
+
+    def delete_command(self):
+        command = (
+            session.query(UserCommands)
+            .filter_by(command_name=self.command_name)
+            .delete()
+        )
+        session.commit()
+        return command
+
+    def update_command(self):
+        command = (
+            session.query(UserCommands)
+            .filter_by(command_name=self.command_name)
+            .first()
+        )
+        command.message = self.message
+        command.date = datetime.now()
+        session.commit()
+        return command
+
+    def save(self):
+        first_row = (
+            session.query(UserCommands)
+            .filter_by(user_id=self.user_id, command_name=self.command_name)
+            .first()
+        )
+        if first_row is None:
+            session.add(self)
+            session.commit()
+            return self
+        return first_row
+
 
     def __repr__(self):
         return "<UserCommands(date={0})>".format(self.date)

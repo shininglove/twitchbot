@@ -1,7 +1,7 @@
 import os, json
 from channel.youtube import check_duration
-from database.models import User, SongRequests, UserMessages, SoundEffects
-from sounds.utilities import locate_sound, play_song_limits
+from database.models import User, SongRequests, UserMessages, SoundEffects,UserCommands
+from sounds.utilities import locate_sound, play_song_limits, remove_sound
 
 limit_duration = os.getenv("LIMIT_SONG_LENGTH", "true").lower() == "true"
 max_duration = int(os.getenv("MAX_SONG_DURATION"))
@@ -33,6 +33,18 @@ def save_message(user, message):
     user_message.save()
     return user_message
 
+def update_command(user,action,command_name ,message):
+    current_user = User(user_id=user.user_id, name=user.display_name)
+    saved_user = current_user.save()
+    user_command = UserCommands(user_id=saved_user.id,command_name=command_name ,message=message)
+    if action == "add":
+        user_command.save()
+    elif action == "edit":
+        user_command.update_command()
+    elif action == "delete":
+        user_command.delete_command()
+    return user_command 
+
 
 def save_sound_effect(user, sound):
     """
@@ -59,6 +71,13 @@ def approve_sound_effect(username,sound_num):
         return "Sound effect doesn't exist."
     return f"@{username}, {approved_status}"
 
+def deny_sound_effect(username,sound_num):
+    sound_effect = SoundEffects(id=sound_num)
+    deny_status = sound_effect.delete_sound()
+    if deny_status is None:
+        return "Sound effect doesn't exist."
+    return f"@{username}, {approved_status}"
+
 
 def find_sound_effect(sound_name):
     sound_effect = SoundEffects.find_sound(sound_name)
@@ -80,4 +99,13 @@ def play_theme_song(username):
 
 
 def remove_sound_effect(sound_name):
-    pass
+    sound_effect = SoundEffects.find_sound(sound_name)
+    sounds_location = locate_sound(sound_effect.name)
+    if sounds_location:
+        remove_sound(sound_name)
+        sound_effect.delete_sound()
+    return f"Sound Effect: {sound_effect.name} has been deleted"
+
+def find_command(command):
+    user_command = UserCommands(command_name=command)
+    return user_command.find_command()

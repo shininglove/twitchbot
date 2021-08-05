@@ -44,6 +44,8 @@ elif operation.startswith("create"):
         print(create_table(UserMessages))
     elif operation_names[1].lower() == "effects":
         print(create_table(SoundEffects))
+    elif operation_names[1].lower() == "commands":
+        print(create_table(UserCommands))
 elif operation.startswith("delete"):
     if operation_names[1].lower() == "user":
         print(delete_table(User))
@@ -53,3 +55,5 @@ elif operation.startswith("delete"):
         print(delete_table(UserMessages))
     elif operation_names[1].lower() == "effects":
         print(delete_table(SoundEffects))
+    elif operation_names[1].lower() == "commands":
+        print(delete_table(UserCommands))
