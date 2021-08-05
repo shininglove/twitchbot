@@ -48,7 +48,7 @@ class SoundEffects(Base):
     id = db.Column("id", db.Integer, primary_key=True)
     name = db.Column("sound_name", db.String(255))
     url = db.Column("sound_url", db.String(255))
-    sound_type = db.Column("sound_type", db.String(255),default="sound")
+    sound_type = db.Column("sound_type", db.String(255), default="sound")
     sound_status = db.Column("sound_status", db.String(255), default="unapproved")
     start_time = db.Column("start_time", db.Integer)
     end_time = db.Column("end_time", db.Integer)
@@ -58,20 +58,16 @@ class SoundEffects(Base):
     date = db.Column("date", db.DateTime, default=datetime.now())
 
     @staticmethod
-    def find_sound(sound_name,sound_type="sound"):
+    def find_sound(sound_name, sound_type="sound"):
         sound = (
             session.query(SoundEffects)
-            .filter_by(name=sound_name,sound_type=sound_type)
+            .filter_by(name=sound_name, sound_type=sound_type)
             .first()
         )
         return sound
 
     def delete_sound(self):
-        sound = (
-            session.query(SoundEffects)
-            .filter_by(name=self.name)
-            .delete()
-        )
+        sound = session.query(SoundEffects).filter_by(name=self.name).delete()
         try:
             session.commit()
         except Exception:
@@ -81,7 +77,7 @@ class SoundEffects(Base):
     def approve(self):
         unapproved_row = (
             session.query(SoundEffects)
-            .filter_by(id=self.id,sound_status="unapproved")
+            .filter_by(id=self.id, sound_status="unapproved")
             .first()
         )
         if unapproved_row is None:
@@ -93,11 +89,10 @@ class SoundEffects(Base):
             return f"{unapproved_row.name} has been approved."
         return f"Error while downloading sound effect"
 
-
     def save(self):
         first_row = (
             session.query(SoundEffects)
-            .filter((SoundEffects.url==self.url) | (SoundEffects.name==self.name))
+            .filter((SoundEffects.url == self.url) | (SoundEffects.name == self.name))
             .first()
         )
         if first_row is None:
@@ -167,7 +162,7 @@ class UserCommands(Base):
     command_name = db.Column("command_name", db.String(255))
     message = db.Column("message", db.String(255))
     aliases = db.Column("aliases", db.String(255))
-    user_level = db.Column("user_level", db.Integer,default=0)
+    user_level = db.Column("user_level", db.Integer, default=0)
     user_id = db.Column(
         db.Integer, db.ForeignKey(f"{DB_SCHEMA}.user_info.id"), nullable=False
     )
@@ -212,7 +207,6 @@ class UserCommands(Base):
             session.commit()
             return self
         return first_row
-
 
     def __repr__(self):
         return "<UserCommands(date={0})>".format(self.date)

@@ -13,7 +13,7 @@ from commands.handler import (
     theme_song,
     search_command,
     delete_sound,
-    command_updater
+    command_updater,
 )
 
 
@@ -56,15 +56,15 @@ class Message:
         elif command == "hi":
             self.output = f"@{self.username} HELLO"
         elif command == "approve":
-            self.output = approve_sound(self.username,command_params)
+            self.output = approve_sound(self.username, command_params)
         elif command == "deny":
-            self.output = deny_sound(self.username,command_params)
+            self.output = deny_sound(self.username, command_params)
         elif command == "themesong":
             self.output = add_theme_song(self.user, raw_command)
         elif command == "deletesound":
             self.output = delete_sound(command_params)
         elif command == keyword:
-            self.output = command_updater(self.user,command_params)
+            self.output = command_updater(self.user, command_params)
         elif search_sound(command):
             play_soundeffect(command)
         if saved_command:

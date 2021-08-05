@@ -2,12 +2,25 @@
 import os
 from channel.twitch import post_song, current_song, wrong_song
 from channel.youtube import search_youtube
-from channel.utilities import save_song_request, save_message, save_sound_effect,approve_sound_effect,find_sound_effect,play_sound_effect,play_theme_song,find_command,remove_sound_effect,deny_sound_effect,update_command
+from channel.utilities import (
+    save_song_request,
+    save_message,
+    save_sound_effect,
+    approve_sound_effect,
+    find_sound_effect,
+    play_sound_effect,
+    play_theme_song,
+    find_command,
+    remove_sound_effect,
+    deny_sound_effect,
+    update_command,
+)
 from commands.models import ChatSound
 
 """
 TODO: Locking down approve.
 """
+
 
 def songrequest(user, command):
     if "youtube" not in command:
@@ -54,6 +67,7 @@ def soundeffect(user, command):
         return f"{sound_effect.name} has been added and not approved yet. id: #{sound_effect.id}."
     return f"@{ user.display_name }, that sound name or url is already added"
 
+
 def add_theme_song(user, command):
     """
     Add Sounds to DB to be approved.
@@ -69,7 +83,7 @@ def add_theme_song(user, command):
             raise ValueError
         if any(not part.isalnum() for part in name):
             raise ValueError
-        sound = ChatSound(name, url, start_time, end_time,sound_type="theme")
+        sound = ChatSound(name, url, start_time, end_time, sound_type="theme")
         valid_sound = sound.valid_sound_duration()
     except ValueError:
         return f"@{ name }, example format: !themesong url 00:00 00:05."
@@ -89,28 +103,32 @@ def wrongsong(user):
 def save_user_message(user, message):
     return save_message(user, message)
 
-def approve_sound(username,sound_num):
-    sound_num = sound_num.replace("#","")
+
+def approve_sound(username, sound_num):
+    sound_num = sound_num.replace("#", "")
     try:
         sound_id = int(sound_num)
     except ValueError:
         return "Enter a valid number. example: !approve 1"
-    return approve_sound_effect(username,sound_id)
+    return approve_sound_effect(username, sound_id)
 
-def deny_sound(username,sound_num):
-    sound_num = sound_num.replace("#","")
+
+def deny_sound(username, sound_num):
+    sound_num = sound_num.replace("#", "")
     try:
         sound_id = int(sound_num)
     except ValueError:
         return "Enter a valid number. example: !deny 1"
-    return deny_sound_effect(username,sound_id)
+    return deny_sound_effect(username, sound_id)
 
 
 def search_sound(command):
     return find_sound_effect(command)
 
+
 def play_soundeffect(sound_name):
     play_sound_effect(sound_name)
+
 
 def delete_sound(command_params):
     command_parts = command_params.split()
@@ -119,13 +137,16 @@ def delete_sound(command_params):
     sound_name = command_parts[0]
     return remove_sound_effect(sound_name)
 
+
 def theme_song(username):
     play_theme_song(username)
 
-def search_command(command):
-    return find_command(command) 
 
-def command_updater(user,command_params):
+def search_command(command):
+    return find_command(command)
+
+
+def command_updater(user, command_params):
     keyword = os.getenv("COMMAND_KEYWORD")
     name = user.display_name
     try:
@@ -133,13 +154,15 @@ def command_updater(user,command_params):
         action = command_parts[0]
         command_name = command_parts[1]
         message = ""
-        if action == "add" or action =="edit":
+        if action == "add" or action == "edit":
             message = " ".join(command_parts[2:])
             if not message:
-                return f"@{ name }, example format: !{keyword} add/edit/delete [command]"
+                return (
+                    f"@{ name }, example format: !{keyword} add/edit/delete [command]"
+                )
     except IndexError:
         return f"@{ name }, example format: !{keyword} add/edit/delete [command]"
-    update_status = update_command(user,action,command_name,message)
+    update_status = update_command(user, action, command_name, message)
     if update_status is not None:
         return f"{command_name} has been {action}ed."
     return f"{command_name} command was already added."

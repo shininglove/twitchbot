@@ -4,7 +4,7 @@ from logger import logger
 
 
 class ChatSound:
-    def __init__(self, name, url, start, end,sound_type="sound"):
+    def __init__(self, name, url, start, end, sound_type="sound"):
         self.name = name
         self.url = url
         self.start = self.parse_time(start)
