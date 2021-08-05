@@ -6,8 +6,8 @@ from pydub.effects import normalize
 
 def play_song(song):
     dbs = song.dBFS
-    difference = dbs - -30
-    if dbs > -30 or dbs < -40:
+    difference = dbs - -20
+    if dbs > -20 or dbs < -30:
         song = song - difference
     play(song)
 

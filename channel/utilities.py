@@ -99,11 +99,12 @@ def play_sound_effect(sound_name):
 
 def play_theme_song(username):
     theme_sound_effect = SoundEffects.find_sound(username, sound_type="theme")
-    sounds_location = locate_sound(theme_sound_effect.name)
-    if sounds_location:
-        play_song_limits(
-            sounds_location, theme_sound_effect.start_time, theme_sound_effect.end_time
-        )
+    if theme_sound_effect:
+        sounds_location = locate_sound(theme_sound_effect.name)
+        if sounds_location:
+            play_song_limits(
+                sounds_location, theme_sound_effect.start_time, theme_sound_effect.end_time
+            )
 
 
 def remove_sound_effect(sound_name):
