@@ -3,11 +3,14 @@ from pydub import AudioSegment
 from pydub.playback import play
 from pydub.effects import normalize
 
+max_volume = -40
+min_volume = max_volume - 10
+
 
 def play_song(song):
     dbs = song.dBFS
-    difference = dbs - -20
-    if dbs > -20 or dbs < -30:
+    difference = dbs - max_volume
+    if dbs > max_volume or dbs < min_volume:
         song = song - difference
     play(song)
 

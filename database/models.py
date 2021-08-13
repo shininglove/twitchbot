@@ -191,6 +191,8 @@ class UserCommands(Base):
             .filter_by(command_name=self.command_name)
             .first()
         )
+        if command is None:
+            return None
         command.message = self.message
         command.date = datetime.now()
         session.commit()

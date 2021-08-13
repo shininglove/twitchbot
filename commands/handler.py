@@ -49,15 +49,10 @@ def soundeffect(user, command):
     # hello https://youtube.com/watch? 00:05 00:10
     try:
         name, url, start_time, end_time = raw_sound_req
-        if "youtube" not in url:
-            raise ValueError
-        if ":" not in start_time or ":" not in end_time:
-            raise ValueError
-        if any(not part.isalnum() for part in name):
-            raise ValueError
         sound = ChatSound(name, url, start_time, end_time)
         valid_sound = sound.valid_sound_duration()
-    except ValueError:
+    except ValueError as ve:
+        print(ve)
         return f"@{ user.display_name }, example format: !soundeffect name url 00:00 00:05."
     if valid_sound:
         sound_effect = save_sound_effect(user, sound)
@@ -77,15 +72,10 @@ def add_theme_song(user, command):
     name = user.display_name
     try:
         url, start_time, end_time = raw_sound_req
-        if "youtube" not in url:
-            raise ValueError
-        if ":" not in start_time or ":" not in end_time:
-            raise ValueError
-        if any(not part.isalnum() for part in name):
-            raise ValueError
         sound = ChatSound(name, url, start_time, end_time, sound_type="theme")
         valid_sound = sound.valid_sound_duration()
-    except ValueError:
+    except ValueError as ve:
+        print(ve)
         return f"@{ name }, example format: !themesong url 00:00 00:05."
     if valid_sound:
         sound_effect = save_sound_effect(user, sound)
@@ -151,8 +141,8 @@ def command_updater(user, command_params):
     name = user.display_name
     try:
         command_parts = command_params.split()
-        action = command_parts[0]
-        command_name = command_parts[1]
+        action = command_parts[0].lower()
+        command_name = command_parts[1].lower()
         message = ""
         if action == "add" or action == "edit":
             message = " ".join(command_parts[2:])

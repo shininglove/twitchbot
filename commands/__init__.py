@@ -32,7 +32,7 @@ class Message:
             self.parse(command)
         if user_message.first_message:
             print("First User Message")
-            theme_song(self.username)
+            theme_song(self.username.lower())
 
     def parse(self, raw_command):
         command_parts = raw_command.lower().split()
@@ -40,6 +40,7 @@ class Message:
             return None
         command = command_parts[0].lower()
         command_params = " ".join(command_parts[1:])
+        raw_command_params = " ".join(raw_command.split()[1:])
         saved_command = search_command(command)
         keyword = os.getenv("COMMAND_KEYWORD")
 
@@ -64,7 +65,7 @@ class Message:
         elif command == "deletesound":
             self.output = delete_sound(command_params)
         elif command == keyword:
-            self.output = command_updater(self.user, command_params)
+            self.output = command_updater(self.user, raw_command_params)
         elif search_sound(command):
             play_soundeffect(command)
         if saved_command:
