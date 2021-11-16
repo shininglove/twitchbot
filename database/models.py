@@ -1,4 +1,4 @@
-import os
+import os, random
 from datetime import datetime, timedelta
 from sqlalchemy.orm import relationship
 from database.utilities import db, Base, session
@@ -66,6 +66,14 @@ class SoundEffects(Base):
         )
         return sound
 
+    @staticmethod
+    def find_all_sounds(limit=10):
+        total_sounds = session.query(SoundEffects).filter_by(sound_type="sound").all()
+        if limit > len(total_sounds):
+            limit = len(total_sounds)
+        sounds = random.sample(total_sounds, limit)
+        return sounds
+
     def delete_sound(self):
         sound = session.query(SoundEffects).filter_by(name=self.name).delete()
         try:
@@ -82,10 +90,10 @@ class SoundEffects(Base):
         )
         if unapproved_row is None:
             return None
-        unapproved_row.sound_status = "approved"
         session.commit()
         song_status = download_song(unapproved_row)
         if song_status:
+            unapproved_row.sound_status = "approved"
             return f"{unapproved_row.name} has been approved."
         return f"Error while downloading sound effect"
 
@@ -224,11 +232,12 @@ class UserMessages(Base):
     )
     date = db.Column("date_created", db.DateTime, default=datetime.now())
 
-    @property
     def first_message(self):
-        yesterday = datetime.today() - timedelta(days=1)
+        yesterday = datetime.today() - timedelta(days=0.25)
         messages = (
-            session.query(UserMessages).filter(UserMessages.date > yesterday).all()
+            session.query(UserMessages)
+            .filter(UserMessages.user_id == self.user_id, UserMessages.date > yesterday)
+            .all()
         )
         if len(messages) > 1:
             return False
@@ -241,8 +250,11 @@ class UserMessages(Base):
             .first()
         )
         if first_row is None:
-            session.add(self)
-            session.commit()
+            try:
+                session.add(self)
+                session.commit()
+            except Exception as e:
+                logger.debug(str(e))
             return self
         return first_row
 

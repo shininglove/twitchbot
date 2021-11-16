@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, contextlib
 from channel.models import SongDetails
 from channel.utilities import verify_video
 from channel.youtube import check_duration, search_youtube, video_info
@@ -12,8 +12,11 @@ def post_song(youtube_url):
     """
     YT URL: Cut after '?'
     """
-    url_base = youtube_url.split("?")[-1].split("&")
-    key, video_id = url_base[0].split("=")
+    if "youtu.be" not in youtube_url:
+        url_base = youtube_url.split("?")[-1].split("&")
+        key, video_id = url_base[0].split("=")
+    else:
+        video_id = youtube_url.split("/")[-1]
     correct_video_response = verify_video(video_id)
     if correct_video_response is not None:
         return correct_video_response
@@ -69,5 +72,19 @@ def song_queue():
     queue_data = response.json()
     return queue_data
 
+def play_pause_song(state):
+    song_api_url = (
+        f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/player/{state}"
+    )
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.post(song_api_url, headers=headers)
+    song_data = response
+    return song_data
+
+@contextlib.contextmanager
+def control_song(song_name):
+    play_pause_song("pause")
+    yield song_name
+    play_pause_song("play")
 
 # post_song("https://www.youtube.com/watch?v=gVUIDqtw1bk")

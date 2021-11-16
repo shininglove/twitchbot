@@ -1,6 +1,6 @@
 # Example Endpoint: http://tmi.twitch.tv/group/user/samora/chatters
 import os
-from channel.twitch import post_song, current_song, wrong_song
+from channel.twitch import post_song, current_song, wrong_song,control_song
 from channel.youtube import search_youtube
 from channel.utilities import (
     save_song_request,
@@ -14,6 +14,9 @@ from channel.utilities import (
     remove_sound_effect,
     deny_sound_effect,
     update_command,
+    find_all_sounds,
+    rename_sound_effect,
+    rename_theme_song
 )
 from commands.models import ChatSound
 
@@ -23,7 +26,7 @@ TODO: Locking down approve.
 
 
 def songrequest(user, command):
-    if "youtube" not in command:
+    if "youtube" not in command and "youtu.be" not in command:
         raw_song_req = command.split()[1:]
         search_term = " ".join(raw_song_req)
         video_id = search_youtube(search_term)
@@ -116,8 +119,14 @@ def search_sound(command):
     return find_sound_effect(command)
 
 
+def get_sound_list(username):
+    all_sounds = find_all_sounds()
+    return f"@{username}, {all_sounds}"
+
+
 def play_soundeffect(sound_name):
-    play_sound_effect(sound_name)
+    with control_song(sound_name) as sound:
+        play_sound_effect(sound)
 
 
 def delete_sound(command_params):
@@ -129,11 +138,21 @@ def delete_sound(command_params):
 
 
 def theme_song(username):
-    play_theme_song(username)
+    with control_song(username) as song:
+        play_theme_song(song)
 
 
 def search_command(command):
     return find_command(command)
+
+def rename_sounds(username,command_params, sound_type="sound"):
+    try:
+        sound_name, new_name = command_params.strip().split()
+    except ValueError:
+        return f"@{username}, too many paramaters!"
+    if sound_type == "sound":
+        return rename_sound_effect(username,sound_name,new_name)
+    return rename_theme_song(username, sound_name, new_name)
 
 
 def command_updater(user, command_params):

@@ -83,9 +83,31 @@ def deny_sound_effect(username, sound_num):
     return f"@{username}, {approved_status}"
 
 
+def rename_sound_effect(username,sound_name, new_name):
+    sound_effect = SoundEffects.find_sound(sound_name)
+    if sound_effect is None:
+        return "Sound effect doesn't exist."
+    sound_effect.name = new_name
+    sound_status = sound_effect.save()
+    return f"@{username}, {sound_name} changed to {sound_status.name}"
+
+def rename_theme_song(username,theme_name, new_name):
+    sound_effect = SoundEffects.find_sound(theme_name,sound_type="theme")
+    if sound_effect is None:
+        return "Sound effect doesn't exist."
+    sound_effect.name = new_name
+    sound_status = sound_effect.save()
+    return f"@{username}, {theme_name} changed to {sound_status.name}"
+
+
 def find_sound_effect(sound_name):
     sound_effect = SoundEffects.find_sound(sound_name)
     return True if sound_effect else False
+
+
+def find_all_sounds():
+    sound_list = SoundEffects.find_all_sounds()
+    return ", ".join([sound.name for sound in sound_list])
 
 
 def play_sound_effect(sound_name):
@@ -103,7 +125,9 @@ def play_theme_song(username):
         sounds_location = locate_sound(theme_sound_effect.name)
         if sounds_location:
             play_song_limits(
-                sounds_location, theme_sound_effect.start_time, theme_sound_effect.end_time
+                sounds_location,
+                theme_sound_effect.start_time,
+                theme_sound_effect.end_time,
             )
 
 
@@ -119,3 +143,5 @@ def remove_sound_effect(sound_name):
 def find_command(command):
     user_command = UserCommands(command_name=command)
     return user_command.find_command()
+
+

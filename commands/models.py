@@ -18,14 +18,14 @@ class ChatSound:
         seconds = int(secs)
         return minutes_in_seconds + seconds
 
-    def validate_time(self,time_command):
-     if ":" not in time_command:
-        raise ValueError("Invalid time format")
-     return time_command
+    def validate_time(self, time_command):
+        if ":" not in time_command:
+            raise ValueError("Invalid time format")
+        return time_command
 
-    def validate_url(self,url_name):
+    def validate_url(self, url_name):
         valid = False
-        correct_urls = ["youtube","youtu.be","clips.twitch.tv"]
+        correct_urls = ["youtube", "youtu.be", "clips.twitch.tv"]
         for correct in correct_urls:
             if correct in url_name:
                 valid = True
@@ -33,8 +33,9 @@ class ChatSound:
             raise ValueError("Invalid Url Error.")
         return url_name
 
-    def validate_name(self,name):
-        if any(not part.isalnum() for part in name):
+    def validate_name(self, name):
+        parsed_name = name.replace("_", "")
+        if any(not part.isalnum() for part in parsed_name):
             raise ValueError("Invalid Name w/ characters.")
         return name.lower()
 

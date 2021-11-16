@@ -3,7 +3,7 @@ from pydub import AudioSegment
 from pydub.playback import play
 from pydub.effects import normalize
 
-max_volume = -40
+max_volume = -30
 min_volume = max_volume - 10
 
 
@@ -43,3 +43,11 @@ def remove_sound(sound_name):
     sound_path = sounds_location / full_sound_name
     if sound_path.exists():
         sound_path.unlink()
+
+def rename_sound(sound_name,new_name):
+    sounds_location = Path("sounds/effects")
+    full_sound_name = f"{sound_name}.mp3"
+    sound_path = sounds_location / full_sound_name
+    if sound_path.exists():
+        sound_path.rename(sounds_location/f"{new_name}.mp3")
+    

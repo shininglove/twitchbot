@@ -14,6 +14,8 @@ from commands.handler import (
     search_command,
     delete_sound,
     command_updater,
+    get_sound_list,
+    rename_sounds
 )
 
 
@@ -30,7 +32,7 @@ class Message:
         if message.startswith(self.prefix):
             command = message.replace(self.prefix, "")
             self.parse(command)
-        if user_message.first_message:
+        if user_message.first_message():
             print("First User Message")
             theme_song(self.username.lower())
 
@@ -54,6 +56,8 @@ class Message:
             self.output = songrequest(self.user, raw_command)
         elif command == "soundeffect":
             self.output = soundeffect(self.user, raw_command)
+        elif command == "sounds":
+            self.output = get_sound_list(self.username)
         elif command == "hi":
             self.output = f"@{self.username} HELLO"
         elif command == "approve":
@@ -64,6 +68,10 @@ class Message:
             self.output = add_theme_song(self.user, raw_command)
         elif command == "deletesound":
             self.output = delete_sound(command_params)
+        elif command == "renamesound":
+            self.output = rename_sounds(self.username,command_params)
+        elif command == "renametheme":
+            self.output = rename_sounds(self.username,command_params,sound_type="theme")
         elif command == keyword:
             self.output = command_updater(self.user, raw_command_params)
         elif search_sound(command):
