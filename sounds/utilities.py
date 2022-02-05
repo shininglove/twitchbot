@@ -3,7 +3,7 @@ from pydub import AudioSegment
 from pydub.playback import play
 from pydub.effects import normalize
 
-max_volume = -30
+max_volume = -20
 min_volume = max_volume - 10
 
 
@@ -20,8 +20,13 @@ def play_song_limits(song_path, start, end):
     seconds = 1000
     time_start = start * seconds
     time_end = end * seconds
-    limited_song = song[time_start:time_end]
-    play_song(limited_song)
+    if song.duration_seconds > end:
+        print("Trimming the song now...")
+        limited_song = song[time_start:time_end]
+        limited_song.export(song_path)
+        play_song(limited_song)
+    else:
+        play_song(song)
 
 
 # user_song = "./effects/turbo.mp3"

@@ -81,10 +81,23 @@ def play_pause_song(state):
     song_data = response
     return song_data
 
+def get_song_state():
+    song_api_url = (
+        f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/player"
+    )
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.get(song_api_url, headers=headers)
+    song_data = response.json()
+    return song_data["state"]
+
+
 @contextlib.contextmanager
 def control_song(song_name):
-    play_pause_song("pause")
-    yield song_name
-    play_pause_song("play")
+    if get_song_state() != "paused":
+        play_pause_song("pause")
+        yield song_name
+        play_pause_song("play")
+    else:
+        yield song_name
 
 # post_song("https://www.youtube.com/watch?v=gVUIDqtw1bk")

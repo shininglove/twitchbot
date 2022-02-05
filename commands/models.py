@@ -25,7 +25,7 @@ class ChatSound:
 
     def validate_url(self, url_name):
         valid = False
-        correct_urls = ["youtube", "youtu.be", "clips.twitch.tv"]
+        correct_urls = ["youtube", "youtu.be", "clips.twitch.tv","www.twitch.tv"]
         for correct in correct_urls:
             if correct in url_name:
                 valid = True

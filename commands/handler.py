@@ -138,6 +138,7 @@ def delete_sound(command_params):
 
 
 def theme_song(username):
+    # change to decorator potentially
     with control_song(username) as song:
         play_theme_song(song)
 

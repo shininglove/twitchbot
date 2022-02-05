@@ -223,6 +223,9 @@ class UserCommands(Base):
 
 
 class UserMessages(Base):
+    """
+    TODO: increase size of messages to text block
+    """
     __tablename__ = "user_messages"
     __table_args__ = {"schema": DB_SCHEMA}
     id = db.Column("id", db.Integer, primary_key=True)
@@ -239,7 +242,7 @@ class UserMessages(Base):
             .filter(UserMessages.user_id == self.user_id, UserMessages.date > yesterday)
             .all()
         )
-        if len(messages) > 1:
+        if len(messages) >= 1:
             return False
         return True
 
