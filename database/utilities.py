@@ -1,5 +1,5 @@
-from datetime import datetime
-from database.config import connection, test_connection
+from logger import logger
+from database.config import connection
 import sqlalchemy as db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

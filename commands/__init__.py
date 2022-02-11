@@ -8,6 +8,7 @@ from commands.handler import (
     wrongsong,
     save_user_message,
     approve_sound,
+    deny_sound,
     search_sound,
     play_soundeffect,
     theme_song,

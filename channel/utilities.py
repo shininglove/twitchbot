@@ -1,4 +1,5 @@
-import os, json
+import os
+from logger import logger
 from channel.youtube import check_duration
 from database.models import User, SongRequests, UserMessages, SoundEffects, UserCommands
 from sounds.utilities import locate_sound, play_song_limits, remove_sound
@@ -80,7 +81,7 @@ def deny_sound_effect(username, sound_num):
     deny_status = sound_effect.delete_sound()
     if deny_status is None:
         return "Sound effect doesn't exist."
-    return f"@{username}, {approved_status}"
+    return f"@{username}, {deny_status}"
 
 
 def rename_sound_effect(username,sound_name, new_name):

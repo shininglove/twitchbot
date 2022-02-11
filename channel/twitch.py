@@ -1,7 +1,6 @@
 import os, requests, contextlib
 from channel.models import SongDetails
 from channel.utilities import verify_video
-from channel.youtube import check_duration, search_youtube, video_info
 from logger import logger
 
 channel_id = os.getenv("BOT_CHANNEL_ID")
@@ -14,7 +13,7 @@ def post_song(youtube_url):
     """
     if "youtu.be" not in youtube_url:
         url_base = youtube_url.split("?")[-1].split("&")
-        key, video_id = url_base[0].split("=")
+        _, video_id = url_base[0].split("=")
     else:
         video_id = youtube_url.split("/")[-1]
     correct_video_response = verify_video(video_id)
