@@ -32,6 +32,7 @@ class Message:
         if message.startswith(self.prefix):
             command = message.replace(self.prefix, "")
             self.parse(command)
+        print(user_message)
         if user_message.first_message():
             print("First User Message")
             theme_song(self.username.lower())

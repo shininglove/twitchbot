@@ -242,7 +242,7 @@ class UserMessages(Base):
             .filter(UserMessages.user_id == self.user_id, UserMessages.date > yesterday)
             .all()
         )
-        if len(messages) >= 1:
+        if len(messages) > 1:
             return False
         return True
 
@@ -262,4 +262,4 @@ class UserMessages(Base):
         return first_row
 
     def __repr__(self):
-        return "<UserMessage(date={0})>".format(self.date)
+        return "<UserMessage(date={0},user_id={1},message={2})>".format(self.date,self.user_id,self.message)
