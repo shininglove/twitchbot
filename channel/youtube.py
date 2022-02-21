@@ -68,10 +68,3 @@ def video_info(video_id):
         return None
 
     return content_details
-
-
-# search_youtube("dorime ameno")
-
-# video_info("gVUIDqtw1bk")
-
-# search_youtube("glass sky")

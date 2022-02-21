@@ -15,7 +15,7 @@ class SongDetails:
     @staticmethod
     def parse_duration(duration):
         raw_duration = datetime.timedelta(seconds=int(duration))
-        hour, mins, secs = str(raw_duration).split(":")
+        _, mins, secs = str(raw_duration).split(":")
         return f"{mins} mins {secs} secs"
 
     def message(self):
