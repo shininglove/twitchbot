@@ -239,27 +239,18 @@ class UserMessages(Base):
         yesterday = datetime.today() - timedelta(days=0.25)
         messages = (
             session.query(UserMessages)
-            .filter(UserMessages.user_id == self.user_id, UserMessages.date > yesterday)
+            .filter((UserMessages.user_id == self.user_id) & (UserMessages.date > yesterday))
             .all()
         )
-        if len(messages) > 1:
-            return False
-        return True
+        return len(messages) <= 1
 
     def save(self):
-        first_row = (
-            session.query(UserMessages)
-            .filter_by(user_id=self.user_id, message=self.message)
-            .first()
-        )
-        if first_row is None:
-            try:
-                session.add(self)
-                session.commit()
-            except Exception as e:
-                logger.debug(str(e))
-            return self
-        return first_row
+        try:
+            session.add(self)
+            session.commit()
+        except Exception as e:
+            logger.debug(str(e))
+        return self
 
     def __repr__(self):
         return "<UserMessage(date={0},user_id={1},message={2})>".format(self.date,self.user_id,self.message)

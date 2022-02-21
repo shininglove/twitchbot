@@ -14,7 +14,6 @@ def search_youtube(search_term):
         "q": search_term,
         "part": "snippet",
         "type": "video",
-        "videoDuration": "medium",
         "maxResults": 5,
     }
 
