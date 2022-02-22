@@ -84,7 +84,7 @@ def deny_sound_effect(username, sound_num):
     return f"@{username}, {deny_status}"
 
 
-def rename_sound_effect(username,sound_name, new_name):
+def rename_sound_effect(username, sound_name, new_name):
     sound_effect = SoundEffects.find_sound(sound_name)
     if sound_effect is None:
         return "Sound effect doesn't exist."
@@ -92,8 +92,9 @@ def rename_sound_effect(username,sound_name, new_name):
     sound_status = sound_effect.save()
     return f"@{username}, {sound_name} changed to {sound_status.name}"
 
-def rename_theme_song(username,theme_name, new_name):
-    sound_effect = SoundEffects.find_sound(theme_name,sound_type="theme")
+
+def rename_theme_song(username, theme_name, new_name):
+    sound_effect = SoundEffects.find_sound(theme_name, sound_type="theme")
     if sound_effect is None:
         return "Sound effect doesn't exist."
     sound_effect.name = new_name
@@ -144,5 +145,3 @@ def remove_sound_effect(sound_name):
 def find_command(command):
     user_command = UserCommands(command_name=command)
     return user_command.find_command()
-
-

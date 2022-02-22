@@ -49,10 +49,10 @@ def remove_sound(sound_name):
     if sound_path.exists():
         sound_path.unlink()
 
-def rename_sound(sound_name,new_name):
+
+def rename_sound(sound_name, new_name):
     sounds_location = Path("sounds/effects")
     full_sound_name = f"{sound_name}.mp3"
     sound_path = sounds_location / full_sound_name
     if sound_path.exists():
-        sound_path.rename(sounds_location/f"{new_name}.mp3")
-    
+        sound_path.rename(sounds_location / f"{new_name}.mp3")

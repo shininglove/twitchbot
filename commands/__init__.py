@@ -16,7 +16,7 @@ from commands.handler import (
     delete_sound,
     command_updater,
     get_sound_list,
-    rename_sounds
+    rename_sounds,
 )
 
 
@@ -71,9 +71,11 @@ class Message:
         elif command == "deletesound":
             self.output = delete_sound(command_params)
         elif command == "renamesound":
-            self.output = rename_sounds(self.username,command_params)
+            self.output = rename_sounds(self.username, command_params)
         elif command == "renametheme":
-            self.output = rename_sounds(self.username,command_params,sound_type="theme")
+            self.output = rename_sounds(
+                self.username, command_params, sound_type="theme"
+            )
         elif command == keyword:
             self.output = command_updater(self.user, raw_command_params)
         elif search_sound(command):

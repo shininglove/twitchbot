@@ -71,14 +71,14 @@ def song_queue():
     queue_data = response.json()
     return queue_data
 
+
 def play_pause_song(state):
-    song_api_url = (
-        f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/player/{state}"
-    )
+    song_api_url = f"https://api.streamelements.com/kappa/v2/songrequest/{channel_id}/player/{state}"
     headers = {"Authorization": f"Bearer {api_key}"}
     response = requests.post(song_api_url, headers=headers)
     song_data = response
     return song_data
+
 
 def get_song_state():
     song_api_url = (
@@ -98,5 +98,6 @@ def control_song(song_name):
         play_pause_song("play")
     else:
         yield song_name
+
 
 # post_song("https://www.youtube.com/watch?v=gVUIDqtw1bk")

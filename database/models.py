@@ -226,6 +226,7 @@ class UserMessages(Base):
     """
     TODO: increase size of messages to text block
     """
+
     __tablename__ = "user_messages"
     __table_args__ = {"schema": DB_SCHEMA}
     id = db.Column("id", db.Integer, primary_key=True)
@@ -239,7 +240,9 @@ class UserMessages(Base):
         yesterday = datetime.today() - timedelta(days=0.25)
         messages = (
             session.query(UserMessages)
-            .filter((UserMessages.user_id == self.user_id) & (UserMessages.date > yesterday))
+            .filter(
+                (UserMessages.user_id == self.user_id) & (UserMessages.date > yesterday)
+            )
             .all()
         )
         return len(messages) <= 1
@@ -253,4 +256,6 @@ class UserMessages(Base):
         return self
 
     def __repr__(self):
-        return "<UserMessage(date={0},user_id={1},message={2})>".format(self.date,self.user_id,self.message)
+        return "<UserMessage(date={0},user_id={1},message={2})>".format(
+            self.date, self.user_id, self.message
+        )

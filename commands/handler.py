@@ -1,6 +1,6 @@
 # Example Endpoint: http://tmi.twitch.tv/group/user/samora/chatters
 import os
-from channel.twitch import post_song, current_song, wrong_song,control_song
+from channel.twitch import post_song, current_song, wrong_song, control_song
 from channel.youtube import search_youtube
 from channel.utilities import (
     save_song_request,
@@ -16,7 +16,7 @@ from channel.utilities import (
     update_command,
     find_all_sounds,
     rename_sound_effect,
-    rename_theme_song
+    rename_theme_song,
 )
 from commands.models import ChatSound
 
@@ -146,13 +146,14 @@ def theme_song(username):
 def search_command(command):
     return find_command(command)
 
-def rename_sounds(username,command_params, sound_type="sound"):
+
+def rename_sounds(username, command_params, sound_type="sound"):
     try:
         sound_name, new_name = command_params.strip().split()
     except ValueError:
         return f"@{username}, too many paramaters!"
     if sound_type == "sound":
-        return rename_sound_effect(username,sound_name,new_name)
+        return rename_sound_effect(username, sound_name, new_name)
     return rename_theme_song(username, sound_name, new_name)
 
 
