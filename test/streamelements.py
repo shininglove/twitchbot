@@ -1,5 +1,5 @@
 import socketio
-from config import JWT_TOKEN as accessToken
+#from config import JWT_TOKEN as accessToken
 
 sio = socketio.Client()
 

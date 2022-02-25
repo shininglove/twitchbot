@@ -58,6 +58,8 @@ class ChatSound:
             url_base = self.url.split("?")[-1].split("&")
             _, video_id = url_base[0].split("=")
         vid_duration = check_duration(video_id)
+        if vid_duration is None:
+            return False
         if vid_duration > max_duration:
             logger.debug(f"Vid Duration: {vid_duration}")
             return False
