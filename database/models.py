@@ -75,7 +75,6 @@ class SoundEffects(Base):
         return sounds
 
     def delete_sound(self):
-        sound = session.query(SoundEffects).filter_by(name=self.name).delete()
         try:
             session.commit()
         except Exception:
@@ -230,7 +229,7 @@ class UserMessages(Base):
     __tablename__ = "user_messages"
     __table_args__ = {"schema": DB_SCHEMA}
     id = db.Column("id", db.Integer, primary_key=True)
-    message = db.Column("message", db.String(255))
+    message = db.Column("message", db.Text)
     user_id = db.Column(
         db.Integer, db.ForeignKey(f"{DB_SCHEMA}.user_info.id"), nullable=False
     )

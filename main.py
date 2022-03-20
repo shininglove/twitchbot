@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-from logger import logger
 from channel.bot import TwitchBot
 
 NAME = os.getenv("USERNAME")
